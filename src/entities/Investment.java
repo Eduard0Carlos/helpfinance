@@ -1,14 +1,16 @@
 package entities;
 
 import entities.base.EntityBase;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
 
 import java.util.UUID;
 
 public class Investment extends EntityBase implements IEntity<Investment> {
-    public UUID userId;
-    public String stockId;
-    public int amount;
+    private UUID userId;
+    private String stockId;
+    private int amount;
+
+    private Investment() { }
 
     public Investment(UUID userId, String stockId, int amount)
     {
@@ -41,20 +43,5 @@ public class Investment extends EntityBase implements IEntity<Investment> {
 
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    @Override
-    public boolean add(Investment investment) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Investment investment) {
-        return false;
-    }
-
-    @Override
-    public Investment getById(UUID id) {
-        return null;
     }
 }

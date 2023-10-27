@@ -1,7 +1,7 @@
 package entities;
 
 import entities.base.EntityBase;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
 
 import java.util.UUID;
 
@@ -10,6 +10,8 @@ public class Job extends EntityBase implements IEntity<Job> {
     private String companyName;
     private String title;
     private int netSallary;
+
+    private Job() { }
 
     public Job(UUID userId, String companyName, String title, int netSallary)
     {
@@ -51,20 +53,5 @@ public class Job extends EntityBase implements IEntity<Job> {
 
     public void setNetSallary(int netSallary) {
         this.netSallary = netSallary;
-    }
-
-    @Override
-    public boolean add(Job job) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Job job) {
-        return false;
-    }
-
-    @Override
-    public Job getById(UUID id) {
-        return null;
     }
 }

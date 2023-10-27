@@ -3,7 +3,7 @@ package entities;
 import entities.base.EntityBase;
 import enums.MovimentationCategory;
 import enums.MovimentationType;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
 
 import java.util.UUID;
 
@@ -12,9 +12,11 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
     private String title;
     private int amount;
     private MovimentationCategory category;
-    private MovimentationType type;
+    private MovimentationType movType;
 
-    public Movimentation(UUID userId, String title, int amount, MovimentationCategory category, MovimentationType type)
+    private Movimentation() { }
+
+    public Movimentation(UUID userId, String title, int amount, MovimentationCategory category, MovimentationType movType)
     {
         super();
 
@@ -22,7 +24,7 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
         this.setTitle(title);
         this.setAmount(amount);
         this.setCategory(category);
-        this.setType(type);
+        this.setMovType(movType);
     }
 
     public UUID getUserId() {
@@ -57,26 +59,11 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
         this.category = category;
     }
 
-    public MovimentationType getType() {
-        return type;
+    public MovimentationType getMovType() {
+        return movType;
     }
 
-    public void setType(MovimentationType type) {
-        this.type = type;
-    }
-
-    @Override
-    public boolean add(Movimentation movimentation) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Movimentation movimentation) {
-        return false;
-    }
-
-    @Override
-    public Movimentation getById(UUID id) {
-        return null;
+    public void setMovType(MovimentationType type) {
+        this.movType = type;
     }
 }

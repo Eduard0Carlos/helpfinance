@@ -3,30 +3,34 @@ package entities;
 import entities.base.EntityBase;
 import enums.PaymentNetwork;
 import enums.PaymentType;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class PaymentCard extends EntityBase implements IEntity<PaymentCard> {
     private UUID userId;
-    private String number;
+    private String cardNumber;
     private String nickname;
-    private LocalDateTime expirationDate;
+    private Timestamp expirationDate;
     private String cvv;
     private PaymentNetwork paymentNetwork;
-    private PaymentType type;
+    private PaymentType paymentType;
 
-    public PaymentCard(UUID userId, String number, String nickname, LocalDateTime expirationDate, String cvv, PaymentNetwork paymentNetwork, PaymentType type)
+    private PaymentCard() { }
+
+    public PaymentCard(UUID userId, String cardNumber, String nickname, Timestamp expirationDate, String cvv, PaymentNetwork paymentNetwork, PaymentType paymentType)
     {
         super();
 
         this.setUserId(userId);
-        this.setNumber(number);
+        this.setCardNumber(cardNumber);
         this.setNickname(nickname);
         this.setExpirationDate(expirationDate);
         this.setCvv(cvv);
         this.setPaymentNetwork(paymentNetwork);
-        this.setType(type);
+        this.setPaymentType(paymentType);
     }
 
     public UUID getUserId() {
@@ -37,12 +41,12 @@ public class PaymentCard extends EntityBase implements IEntity<PaymentCard> {
         this.userId = userId;
     }
 
-    public String getNumber() {
-        return number;
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setCardNumber(String number) {
+        this.cardNumber = number;
     }
 
     public String getNickname() {
@@ -53,11 +57,11 @@ public class PaymentCard extends EntityBase implements IEntity<PaymentCard> {
         this.nickname = nickname;
     }
 
-    public LocalDateTime getExpirationDate() {
+    public Timestamp getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    public void setExpirationDate(Timestamp expirationDate) {
         this.expirationDate = expirationDate;
     }
 
@@ -77,26 +81,11 @@ public class PaymentCard extends EntityBase implements IEntity<PaymentCard> {
         this.paymentNetwork = paymentNetwork;
     }
 
-    public PaymentType getType() {
-        return type;
+    public PaymentType getPaymentType() {
+        return paymentType;
     }
 
-    public void setType(PaymentType type) {
-        this.type = type;
-    }
-
-    @Override
-    public boolean add(PaymentCard paymentCard) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(PaymentCard paymentCard) {
-        return false;
-    }
-
-    @Override
-    public PaymentCard getById(UUID id) {
-        return null;
+    public void setPaymentType(PaymentType type) {
+        this.paymentType = type;
     }
 }

@@ -1,14 +1,16 @@
 package entities;
 
 import entities.base.EntityBase;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class User extends EntityBase implements IEntity<User> {
     private String name;
     private Byte[] image;
-    private LocalDateTime birthdate;
+    private Timestamp birthdate;
     private int childrenNumber;
     private String email;
     private String password;
@@ -16,7 +18,9 @@ public class User extends EntityBase implements IEntity<User> {
     private int monthlySpendingsLimit;
     private int investmentProfileLevel;
 
-    public User(String name, LocalDateTime birthdate, String email, String password)
+    private User() { }
+
+    public User(String name, Timestamp birthdate, String email, String password)
     {
         super();
 
@@ -54,11 +58,11 @@ public class User extends EntityBase implements IEntity<User> {
         this.image = image;
     }
 
-    public LocalDateTime getBirthdate() {
+    public Timestamp getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(LocalDateTime birthdate) {
+    public void setBirthdate(Timestamp birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -113,23 +117,5 @@ public class User extends EntityBase implements IEntity<User> {
 
     public void setInvestmentProfileLevel(int investmentProfileLevel) {
         this.investmentProfileLevel = investmentProfileLevel;
-    }
-
-    @Override
-    public boolean add(User user) {
-        // TODO: Insert in database
-        return false;
-    }
-
-    @Override
-    public boolean delete(User user) {
-        // TODO: Delete on the database
-        return false;
-    }
-
-    @Override
-    public User getById(UUID id) {
-        // TODO: Search for entity in database
-        return null;
     }
 }

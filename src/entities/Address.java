@@ -1,27 +1,31 @@
 package entities;
 
 import entities.base.EntityBase;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
 import java.util.UUID;
 
 public class Address extends EntityBase implements IEntity<Address> {
     private UUID userId;
     private String cep;
-    private String number;
+    private String houseNumber;
+    private String street;
     private String city;
     private String state;
     private String country;
 
-    public Address(UUID userId, String cep, String number, String city, String state, String country)
+    private Address() { }
+
+    public Address(UUID userId, String cep, String houseNumber, String street, String city, String state, String country)
     {
         super();
 
         this.setUserId(userId);
         this.setCep(cep);
-        this.setNumber(number);
+        this.setHouseNumber(houseNumber);
         this.setCity(city);
         this.setState(state);
         this.setCountry(country);
+        this.setStreet(street);
     }
 
     public UUID getUserId() {
@@ -40,12 +44,12 @@ public class Address extends EntityBase implements IEntity<Address> {
         this.cep = cep;
     }
 
-    public String getNumber() {
-        return number;
+    public String getHouseNumber() {
+        return houseNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
     public String getCity() {
@@ -64,29 +68,19 @@ public class Address extends EntityBase implements IEntity<Address> {
         this.state = state;
     }
 
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
     public String getCountry() {
         return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    @Override
-    public boolean add(Address address) {
-        // TODO: Insert in database
-        return false;
-    }
-
-    @Override
-    public boolean delete(Address address) {
-        // TODO: Delete on the database
-        return false;
-    }
-
-    @Override
-    public Address getById(UUID id) {
-        // TODO: Search for entity in database
-        return null;
     }
 }

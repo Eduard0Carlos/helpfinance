@@ -2,21 +2,23 @@ package entities;
 
 import entities.base.EntityBase;
 import enums.DayOfWeek;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Recurrency extends EntityBase implements IEntity<Recurrency> {
     private UUID movimentationId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private DayOfWeek daysOfWeek;
     private boolean isMonthly;
     private boolean isAnnual;
 
-    public Recurrency(UUID movimentationId, LocalDateTime startDate, LocalDateTime endDate, DayOfWeek daysOfWeek, boolean isMonthly, boolean isAnnual)
+    private Recurrency() { }
+
+    public Recurrency(UUID movimentationId, Timestamp startDate, Timestamp endDate, DayOfWeek daysOfWeek, boolean isMonthly, boolean isAnnual)
     {
         super();
 
@@ -36,19 +38,19 @@ public class Recurrency extends EntityBase implements IEntity<Recurrency> {
         this.movimentationId = movimentationId;
     }
 
-    public LocalDateTime getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
@@ -60,7 +62,7 @@ public class Recurrency extends EntityBase implements IEntity<Recurrency> {
         this.daysOfWeek = daysOfWeek;
     }
 
-    public boolean isMonthly() {
+    public boolean getIsMonthly() {
         return isMonthly;
     }
 
@@ -68,26 +70,11 @@ public class Recurrency extends EntityBase implements IEntity<Recurrency> {
         isMonthly = monthly;
     }
 
-    public boolean isAnnual() {
+    public boolean getIsAnnual() {
         return isAnnual;
     }
 
     public void setAnnual(boolean annual) {
         isAnnual = annual;
-    }
-
-    @Override
-    public boolean add(Recurrency recurrency) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Recurrency recurrency) {
-        return false;
-    }
-
-    @Override
-    public Recurrency getById(UUID id) {
-        return null;
     }
 }

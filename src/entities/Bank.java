@@ -1,15 +1,17 @@
 package entities;
 
 import entities.base.EntityBase;
-import interfaces.IEntity;
+import interfaces.entity.IEntity;
 import java.util.UUID;
 
 public class Bank extends EntityBase implements IEntity<Bank> {
-    public UUID userId;
-    public String name;
-    public int bankAccountNumber;
-    public int bankAgencyNumber;
-    public String integrationToken;
+    private UUID userId;
+    private String name;
+    private int bankAccountNumber;
+    private int bankAgencyNumber;
+    private String integrationToken;
+
+    private Bank() { }
 
     public Bank(UUID userId, String name, int bankAccountNumber, int bankAgencyNumber, String integrationToken)
     {
@@ -60,20 +62,5 @@ public class Bank extends EntityBase implements IEntity<Bank> {
 
     public void setIntegrationToken(String integrationToken) {
         this.integrationToken = integrationToken;
-    }
-
-    @Override
-    public boolean add(Bank bank) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Bank bank) {
-        return false;
-    }
-
-    @Override
-    public Bank getById(UUID id) {
-        return null;
     }
 }
