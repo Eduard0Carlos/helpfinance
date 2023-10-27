@@ -1,5 +1,6 @@
 package entities.base;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -44,6 +45,11 @@ public abstract class EntityBase {
     public boolean isActive()
     {
         return this.active;
+    }
+
+    private void setActive(BigDecimal active)
+    {
+        this.active = active.intValue() ==  1;
     }
 
     private void setCreatedAt(Timestamp createdAt)

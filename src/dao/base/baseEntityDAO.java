@@ -3,13 +3,14 @@ package dao.base;
 import contexts.helpFinanceContext;
 import entities.base.EntityBase;
 import interfaces.dao.base.IBaseDAO;
+import utils.classUtils;
+import utils.fieldUtils;
+import utils.statementUtils;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,25 +29,16 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
         if (connection == null)
             return;
 
-        PreparedStatement statement = null;
-        var generatedScript = "";
+        var statement = (PreparedStatement) null;
         var fieldsValues = new ArrayList<Object>();
+        var generatedScript = "";
 
         try {
             var classType = entity.getClass();
-
-            var entityFields = classType.getDeclaredFields();
-            var entityBaseFields = EntityBase.class.getDeclaredFields();
-
-            var fields = new ArrayList<Field>();
-
-            fields.addAll(Arrays.stream(entityFields).toList());
-            fields.addAll(Arrays.stream(entityBaseFields).toList());
-
-            var methods = Arrays.stream(classType.getMethods()).filter(x -> x.getName().toLowerCase().startsWith("get")).toList();
+            var fields = classUtils.getEntityFields(classType);
 
             var fieldsNames = new StringBuilder();
-            var fieldValuesFormatted = new StringBuilder();
+            var parameters = new StringBuilder();
 
             fields.remove(fields.size() - 1);
 
@@ -56,53 +48,20 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
                 var separator = (count == fields.size() ? "" : ", ");
 
                 fieldsNames.append(field.getName() + separator);
-                fieldValuesFormatted.append(":param" + count + separator);
+                parameters.append(":param" + count + separator);
 
-                var getMethodFind = methods.stream().filter(z -> z.getName().toLowerCase().equals("get" + field.getName().toLowerCase())).findFirst();
-                var getMethod = getMethodFind.orElse(null);
+                var value = fieldUtils.valueOf(entity, field);
 
-                if (getMethod != null) {
-                    try {
-                        var value = getMethod.invoke(entity);
-
-                        if (field.getType().getTypeName().equals(UUID.class.getTypeName()))
-                        {
-                            value = ((UUID)value).toString().replace("-", "").toUpperCase();
-                        }
-
-                        if (field.getType().getSuperclass() != null && field.getType().getSuperclass().getTypeName().equals(Enum.class.getTypeName()))
-                        {
-                            value = value.toString();
-                        }
-
-                        fieldsValues.add(value);
-                    } catch (Exception e) {
-                        fieldsValues.add(null);
-                        e.printStackTrace();
-                    }
-                }
+                fieldsValues.add(value);
 
                 count++;
             }
 
-            var insertStatement = "INSERT INTO " + _tableName + " (" + fieldsNames + ")" + " VALUES (" + fieldValuesFormatted + ")";
+            generatedScript = "INSERT INTO " + _tableName + " (" + fieldsNames + ")" + " VALUES (" + parameters + ")";
 
-            statement = connection.prepareStatement(insertStatement);
+            statement = connection.prepareStatement(generatedScript);
 
-            int position = 1;
-
-            for (var fieldValue : fieldsValues) {
-                try {
-                    statement.setObject(position, fieldValue);
-
-                    position++;
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
-            };
-
-            generatedScript = insertStatement;
+            statementUtils.trySetParams(statement, fieldsValues);
 
             statement.executeUpdate();
         } catch (Exception e) {
@@ -110,7 +69,8 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
             System.out.println(generatedScript);
         } finally {
             try {
-                statement.close();
+                if (statement != null)
+                    statement.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -118,56 +78,41 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
     }
 
     public void update(TEntity entity) {
-        PreparedStatement statement = null;
+        var statement = (PreparedStatement) null;
+        var generatedScript = "";
 
         try {
             var classType = entity.getClass();
-
-            var fields = classType.getDeclaredFields();
-            var methods = Arrays.stream(classType.getMethods()).filter(x -> x.getName().toLowerCase().startsWith("get")).toList();
+            var fields = classUtils.getEntityFields(classType);
 
             var setScript = new StringBuilder();
             var fieldsValues = new ArrayList<Object>();
 
-            var count = 1;
-
             setScript.append(" SET ");
 
+            var count = 1;
+
             for (var field : fields) {
-                setScript.append(field.getName() + "? ");
-
-                var getMethod = methods.stream().filter(z -> z.getName().toLowerCase().contains(field.getName().toLowerCase())).findFirst().get();
-
-                if (getMethod != null) {
-                    try {
-                        fieldsValues.add(getMethod.invoke(entity));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                setScript.append(field.getName() + " = :param" + count);
+                fieldsValues.add(fieldUtils.valueOf(entity, field));
 
                 count++;
             }
 
-            var updateStatement = "UPDATE " + classType.getSimpleName() + setScript + " WHERE id = " + entity.getId();
+            generatedScript = "UPDATE " + _tableName + setScript + " WHERE id = " + entity.getId();
 
-            statement = connection.prepareStatement(updateStatement);
+            statement = connection.prepareStatement(generatedScript);
 
-            int position = 1;
-
-            for (var fieldValue : fieldsValues) {
-                statement.setObject(position, fieldValue);
-
-                position++;
-            }
-            ;
+            statementUtils.trySetParams(statement, fieldsValues);
 
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(generatedScript);
         } finally {
             try {
-                statement.close();
+                if (statement != null)
+                    statement.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -175,21 +120,18 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
     }
 
     public void delete(TEntity entity) {
-        PreparedStatement statement = null;
+        var statement = (PreparedStatement) null;
 
         try {
-            var classType = entity.getClass();
-
-            var deleteStatement = "DELETE FROM " + classType.getSimpleName() + " WHERE id = " + entity.getId();
-
-            statement = connection.prepareStatement(deleteStatement);
+            statement = connection.prepareStatement("DELETE FROM " + _tableName + " WHERE id = " + fieldUtils.formatUuidToString(entity.getId()));
 
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                statement.close();
+                if (statement != null)
+                    statement.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -197,19 +139,18 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
     }
 
     public void delete(UUID id) {
-        PreparedStatement statement = null;
+        var statement = (PreparedStatement) null;
 
         try {
-            var deleteStatement = "DELETE FROM " + _entityType.getSimpleName() + " WHERE id = " + id;
-
-            statement = connection.prepareStatement(deleteStatement);
+            statement = connection.prepareStatement("DELETE FROM " + _tableName + " WHERE id = " + fieldUtils.formatUuidToString(id));
 
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                statement.close();
+                if (statement != null)
+                    statement.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -217,43 +158,24 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
     }
 
     public TEntity get(UUID id) {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        if (connection == null)
+            return null;
+
+        var statement = (PreparedStatement) null;
+        var resultSet = (ResultSet) null;
 
         try {
-            statement = connection.prepareStatement("SELECT * FROM " + _tableName + " WHERE id = '" + id.toString().replace("-", "").toUpperCase() + "'");
+            statement = connection.prepareStatement("SELECT * FROM " + _tableName + " WHERE id = '" + fieldUtils.formatUuidToString(id) + "'");
             resultSet = statement.executeQuery();
 
             if (!resultSet.next())
                 return null;
 
-            var constructor = Arrays.stream(_entityType.getDeclaredConstructors()).filter(x -> x.getParameterCount() == 0).findFirst().get();
-            constructor.setAccessible(true);
-            var entity = (TEntity) constructor.newInstance();
+            var entity = classUtils.tryGetInstanceOf(_entityType);
+            var fields = classUtils.getEntityFields(_entityType);
 
-            var fields = new java.util.ArrayList<>(Arrays.stream(_entityType.getDeclaredFields()).toList());
-            fields.addAll(Arrays.stream(_entityType.getSuperclass().getDeclaredFields()).toList());
-            var methods = _entityType.getMethods();
-
-            for (var field : fields) {
-                try {
-                    var setMethod = Arrays.stream(methods).filter(x -> x.getName().toLowerCase().contains("set" + field.getName().toLowerCase())).findFirst().get();
-
-                    if (setMethod != null && setMethod.getParameterCount() > 0) {
-                        var value = resultSet.getObject(field.getName());
-
-                        if (field.getType().getTypeName().equals(UUID.class.getTypeName()))
-                        {
-                            var uuidFormated = value.toString().substring(0, 8) + "-" + value.toString().substring(8, 12) + "-" + value.toString().substring(12, 16) + "-" + value.toString().substring(16, 20) + "-" + value.toString().substring(20, value.toString().length() - 1).trim();
-                            value = UUID.fromString(uuidFormated);
-                        }
-
-                        setMethod.invoke(entity, value);
-                    }
-                } catch (Exception e) {
-                    continue;
-                }
-            }
+            for (var field : fields)
+                fieldUtils.setValueTo(entity, field, resultSet.getObject(field.getName()));
 
             return entity;
         } catch (Exception e) {
@@ -261,8 +183,11 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
             return null;
         } finally {
             try {
-                statement.close();
-                resultSet.close();
+                if (statement != null)
+                    statement.close();
+
+                if (resultSet != null)
+                    resultSet.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -270,8 +195,11 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
     }
 
     public List<TEntity> getAll() {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        if (connection == null)
+            return null;
+
+        var statement = (PreparedStatement) null;
+        var resultSet = (ResultSet) null;
 
         try {
             statement = connection.prepareStatement("SELECT * FROM " + _tableName);
@@ -280,33 +208,11 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
             var entities = new ArrayList<TEntity>();
 
             while (resultSet.next()) {
-                var constructor = Arrays.stream(_entityType.getDeclaredConstructors()).filter(x -> x.getParameterCount() == 0).findFirst().get();
-                constructor.setAccessible(true);
-                var newEntity = (TEntity) constructor.newInstance();
+                var newEntity = classUtils.tryGetInstanceOf(_entityType);
+                var fields = classUtils.getEntityFields(_entityType);
 
-                var fields = new java.util.ArrayList<>(Arrays.stream(_entityType.getDeclaredFields()).toList());
-                fields.addAll(Arrays.stream(_entityType.getSuperclass().getDeclaredFields()).toList());
-                var methods = _entityType.getMethods();
-
-                for (var field : fields) {
-                    try {
-                        var setMethod = Arrays.stream(methods).filter(x -> x.getName().toLowerCase().equals("set" + field.getName().toLowerCase())).findFirst().orElse(null);
-
-                        if (setMethod != null && setMethod.getParameterCount() > 0) {
-                            var value = resultSet.getObject(field.getName());
-
-                            if (field.getType().getTypeName().equals(UUID.class.getTypeName()))
-                            {
-                                var uuidFormated = value.toString().substring(0, 8) + "-" + value.toString().substring(8, 12) + "-" + value.toString().substring(12, 16) + "-" + value.toString().substring(16, 20) + "-" + value.toString().substring(20, value.toString().length() - 1).trim();
-                                value = UUID.fromString(uuidFormated);
-                            }
-
-                            setMethod.invoke(newEntity, value);
-                        }
-                    } catch (Exception e) {
-                        continue;
-                    }
-                }
+                for (var field : fields)
+                   fieldUtils.setValueTo(newEntity, field, resultSet.getObject(field.getName()));
 
                 entities.add(newEntity);
             }
@@ -317,8 +223,11 @@ public class baseEntityDAO<TEntity extends EntityBase> implements IBaseDAO<TEnti
             return null;
         } finally {
             try {
-                statement.close();
-                resultSet.close();
+                if (statement != null)
+                    statement.close();
+
+                if (resultSet != null)
+                    resultSet.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

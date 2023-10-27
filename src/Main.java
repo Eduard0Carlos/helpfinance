@@ -9,17 +9,21 @@ import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
-        InsertData(5);
+        //InsertData(5);
 
         var userDAO = daoFactory.tryGet(UserDAO.class);
-        var getUser = userDAO.get(UUID.fromString("2f59e99d-1fda-40a3-ab1f-0621884eaeb6"));
 
         var allUsers = userDAO.getAll();
 
-        if (allUsers != null)
-            for (var user : allUsers)
-                System.out.println(user.toString());
+        if (allUsers == null)
+            return;
 
+        for (var user : allUsers)
+            System.out.println(user.toString());
+
+        var getUser = userDAO.get(allUsers.stream().findFirst().orElse(null).getId());
+
+        System.out.println("\r\nUSER by Id:" + getUser);
     }
 
     private static void InsertData(int amount) {
@@ -38,15 +42,13 @@ public class Main {
         }
     }
 
-    private static void InsertRecurrency(UUID movimentationId)
-    {
+    private static void InsertRecurrency(UUID movimentationId) {
         var recurrencyDAO = daoFactory.tryGet(RecurrencyDAO.class);
         var recurrency = new Recurrency(movimentationId, Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()), DayOfWeek.FRIDAY, true, false);
         recurrencyDAO.insert(recurrency);
     }
 
-    private static void InsertPaymentCard(UUID userId)
-    {
+    private static void InsertPaymentCard(UUID userId) {
         var paymentCardDAO = daoFactory.tryGet(PaymentCardDAO.class);
         var paymentCard = new PaymentCard(userId, "5452569214121234", "Carlos Vieira", Timestamp.valueOf(LocalDateTime.now()), "852", PaymentNetwork.MASTERCARD, PaymentType.CREDIT);
         paymentCardDAO.insert(paymentCard);
@@ -75,7 +77,7 @@ public class Main {
 
     private static void InsertAddress(UUID userId) {
         var addressDAO = daoFactory.tryGet(AddressDAO.class);
-        var address = new Address(userId, "605900", "86", "Osaimon","Foleza", "CE", "Brasil");
+        var address = new Address(userId, "605900", "86", "Osaimon", "Foleza", "CE", "Brasil");
         addressDAO.insert(address);
     }
 

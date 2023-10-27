@@ -3,20 +3,19 @@ package entities;
 import entities.base.EntityBase;
 import interfaces.entity.IEntity;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class User extends EntityBase implements IEntity<User> {
     private String name;
     private Byte[] image;
     private Timestamp birthdate;
-    private int childrenNumber;
+    private BigDecimal childrenNumber;
     private String email;
     private String password;
-    private int balance;
-    private int monthlySpendingsLimit;
-    private int investmentProfileLevel;
+    private BigDecimal balance;
+    private BigDecimal monthlySpendingsLimit;
+    private BigDecimal investmentProfileLevel;
 
     private User() { }
 
@@ -66,11 +65,11 @@ public class User extends EntityBase implements IEntity<User> {
         this.birthdate = birthdate;
     }
 
-    public int getChildrenNumber() {
+    public BigDecimal getChildrenNumber() {
         return childrenNumber;
     }
 
-    public void setChildrenNumber(int childrenNumber) {
+    public void setChildrenNumber(BigDecimal childrenNumber) {
         this.childrenNumber = childrenNumber;
     }
 
@@ -90,32 +89,36 @@ public class User extends EntityBase implements IEntity<User> {
         this.password = password;
     }
 
-    public int getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void addBalance(int balance) {
-        this.balance += balance;
+    public void addBalance(BigDecimal balance) {
+        this.balance.add(balance);
     }
 
-    public void removeBalance(int balance)
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public void removeBalance(BigDecimal balance)
     {
-        this.balance -= balance;
+        this.balance.subtract(balance);
     }
 
-    public int getMonthlySpendingsLimit() {
+    public BigDecimal getMonthlySpendingsLimit() {
         return monthlySpendingsLimit;
     }
 
-    public void setMonthlySpendingsLimit(int monthlySpendingsLimit) {
+    public void setMonthlySpendingsLimit(BigDecimal monthlySpendingsLimit) {
         this.monthlySpendingsLimit = monthlySpendingsLimit;
     }
 
-    public int getInvestmentProfileLevel() {
+    public BigDecimal getInvestmentProfileLevel() {
         return investmentProfileLevel;
     }
 
-    public void setInvestmentProfileLevel(int investmentProfileLevel) {
+    public void setInvestmentProfileLevel(BigDecimal investmentProfileLevel) {
         this.investmentProfileLevel = investmentProfileLevel;
     }
 }
