@@ -1,7 +1,6 @@
 package com.helpfinance.domain.services.base;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.helpfinance.core.services.NotificationService;
 import com.helpfinance.domain.entities.base.EntityBase;

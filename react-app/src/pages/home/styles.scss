@@ -1,0 +1,169 @@
+@import "styles/variables";
+
+.home-page {
+    width: 100vw;
+    height: 100vh;
+    background-color: $dark;
+    background-image: url("../../assets/home-background.png");
+    background-size: cover;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+
+    & .content {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 60px;
+
+        & .desktop-mockup {
+            transform: scale(140%) rotate(2deg);
+            margin-top: 10vh;
+            margin-left: 20vw;
+        }
+
+        & .texts {
+            align-self: center;
+
+            & h1 {
+                color: $white;
+                font-family: 'Inter', sans-serif;
+                font-size: 5vh;
+                font-weight: 500;
+                letter-spacing: 5px;
+                text-align: left;
+            }
+        }
+
+        & .start-button {
+            align-self: center;
+            border-radius: 10px;
+            padding: 10px 40px;
+            background-color: $secondary-color;
+            color: $primary;
+            font-weight: bold;
+            transition: transform 111ms ease-in, brightness 111ms ease-in, box-shadow 111ms ease-in-out;
+            cursor: pointer;
+            box-shadow: $secondary-color-shadow;
+
+            &:hover {
+                transform: scale(104%);
+                box-shadow: 0px 0px 20px 0px $secondary-color;
+                filter: brightness(120%);
+            }
+        }
+    }
+
+    & .header {
+        top: 0;
+        position: fixed;
+        width: 100vw;
+        height: 6vh;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        & section.pages {
+            display: flex;
+            flex-direction: row;
+            width: fit-content;
+            color: $white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            gap: 40px;
+
+            & h1:hover {
+                cursor: pointer;
+            }
+
+            & a {
+                transition: color 111ms ease-in, font-weight 111ms ease-in;
+            }
+
+            & a:hover {
+                color: $secondary-color;
+                font-weight: 300;
+                cursor: pointer;
+            }
+        }
+
+        & section.login {
+            display: flex;
+            flex-direction: row;
+            width: fit-content;
+            color: $white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 200;
+            margin-right: 3vw;
+            border-radius: 5px;
+            padding: 3px 30px;
+            border: 1px solid $white;
+            transition: color 111ms ease-in, font-weight 111ms ease-in, border-color 111ms ease-in, box-shadow 111ms ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                & h1 {
+                    cursor: pointer;
+                }
+
+                border-color: $secondary-color;
+                color: $secondary-color;
+                box-shadow: 0px 0px 20px 0px $secondary-color;
+                font-weight: 300;
+            }
+        }
+
+        & .hidden {
+            opacity: 0;
+        }
+
+        & section.dashboard-button {
+            display: flex;
+            flex-direction: row;
+            width: fit-content;
+            color: $dark;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            margin-right: 3vw;
+            border-radius: 5px;
+            padding: 3px 30px;
+            background-color: $secondary-color;
+            transition: transform 111ms ease-in, brightness 111ms ease-in, box-shadow 111ms ease-in-out;
+            box-shadow: $secondary-color-shadow;
+            cursor: pointer;
+
+            & h1:hover {
+                cursor: pointer;
+            }
+
+            &:hover {
+                box-shadow: 0px 0px 20px 0px $secondary-color;
+                transform: scale(103%);
+                filter: brightness(120%);
+            }
+        }
+
+        & section.logo {
+            margin-top: 1vh;
+            margin-left: 3vw;
+
+            & .logo {
+                fill: $white;
+                width: 10vw;
+                height: 6vh;
+                transition: filter 111ms ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    fill: $secondary-color;
+                    filter: drop-shadow(0px 0px 20px $secondary-color) brightness(120%);
+                }
+            }
+        }
+    }
+}

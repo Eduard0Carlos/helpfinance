@@ -1,28 +1,34 @@
-import "./textbox.scss";
+import "./styles.scss";
 
-interface ITextBoxProperties {
-	placeholder?: string,
-	value?: string,
-	onChange?: (value: string) => void,
-	maxLength?: number,
-	onlyNumbers?: boolean
-	type?: "text" | "password" | "number"
+interface ITextBoxProps {
+  className?: string,
+  children?: React.ReactNode,
+  type?: string,
+  placeholder?: string,
+  value?: string | number | undefined,
+  hasError?: boolean,
+  errorMessage?: string,
+  maxLength?: number,
+  width?: string,
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onFocus?: (event: React.FocusEvent<HTMLInputElement, Element>) => void
 }
 
-const TextBox = (props: ITextBoxProperties) => {
-  const onTyped = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.onChange != undefined)
-      props.onChange(event.target.value);
-  };
+const TextBox: React.FunctionComponent<ITextBoxProps> = props => (
 
-  return (
-    <input maxLength={props.maxLength} 
-      onChange={onTyped} 
-      value={props.value} 
-      className="textbox" 
-      type={!props.type ? (props.onlyNumbers ? "number" : "text") : props.type}
-      placeholder={props.placeholder} />
-  );
-};
+  <div className={"textbox" + (props.hasError ? " error" : "")} style={props.width ? {width: props.width } : {}}>
+    <input
+      type={props.type}
+      placeholder={props.placeholder}
+      value={props.value}
+      onChange={props.onChange}
+      maxLength={props.maxLength}
+      onFocus={props.onFocus}
+    >
+      {props.children}
+    </input>
+    {props.hasError ? <p>{props.errorMessage}</p> : <></>}
+  </div>
+);
 
 export default TextBox;

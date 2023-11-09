@@ -1,43 +1,44 @@
 import "normalize.css";
 import "./index.scss";
-import "styles/global.css";
-import React from "react";
-import ReactDOM from "react-dom";
-import AppHeader from "./components/header";
+import "styles/globals.css";
+import * as React from "react";
+import { createRoot } from "react-dom/client";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "components/toast/toaster";
+import LoginPage from "pages/login";
+import DashboardLoadingPage from "pages/dashboard/loading";
+import HomePage from "pages/home";
+import DashboardNavBar from "pages/dashboard";
+import MovimentationPage from "pages/dashboard/movimentation";
+import OverviewPage from "pages/dashboard/overview";
 
-const AppRouter = () => {
-  return (
-    <main className="main-container">
-      <BrowserRouter>
-        <AppHeader />
-        <Toaster />
-        <Routes>
-          {/* <Route path='/' element={<HomePage />} />
-          <Route path='login' element={<LoginPage />} />
-          <Route path='register' element={<RegisterPage />} />
-          <Route path='catalog' element={<CatalogPage />} />
-          <Route path='catalog/vehicle/:id' element={<VehicleDetailPage />} />
-          <Route path='announce' element={<AnnouncePage />} />
-          <Route path='announce/new' element={<NewAnnouncePage />} />
-          <Route path='announce/my' element={<MyAnnouncePage />} />
-          <Route path='announce/my/:id' element={<MyAnnouncePage />} />
-          <Route path='announce/pendents' element={<PendentAnnouncesPage />} />
-          <Route path='vehicles/my' element={<MyVehiclesPage />} />
-          <Route path='about' element={<AboutPage />} />
-          <Route path='*' element={<NotFoundPage />} /> */}
-        </Routes>
-      </BrowserRouter>
-    </main>
-  );
-};
+const AppRouter = () => (
+  <main className="main-container">
+    <BrowserRouter>
+      <Toaster />
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/dashboard/loading' element={<DashboardLoadingPage />} />
+        <Route path='/dashboard' element={<DashboardNavBar />} >
+          <Route index element={<OverviewPage></OverviewPage>} />
+          <Route path='movimentations' element={<MovimentationPage />} />
+          <Route path='investments' element={<></>} />
+          <Route path='profile' element={<></>} />
+        </Route>
+        {/* <Route path='announce/my/:id' element={<MyAnnouncePage />} />
+      <Route path='*' element={<NotFoundPage />} /> */}
+      </Routes>
+    </BrowserRouter>
+  </main>
+);
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")!);
+
+root.render(
   <React.StrictMode>
-    <AppRouter/>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <AppRouter />
+  </React.StrictMode>
 );
 

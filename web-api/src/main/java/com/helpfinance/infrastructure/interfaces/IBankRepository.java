@@ -1,4 +1,7 @@
 package com.helpfinance.infrastructure.interfaces;
 
-public interface IBankRepository {
+import com.helpfinance.domain.entities.Bank;
+import com.helpfinance.infrastructure.interfaces.base.IRepository;
+
+public interface IBankRepository extends IRepository<Bank> {
 }

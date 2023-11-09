@@ -9,17 +9,17 @@ import org.springframework.stereotype.Service;
 import com.helpfinance.domain.entities.User;
 import com.helpfinance.domain.interfaces.services.IUserDomainService;
 import com.helpfinance.domain.services.base.DomainService;
-import com.helpfinance.infrastructure.repositories.UserRepository;
+import com.helpfinance.infrastructure.interfaces.IUserRepository;
 
 @Service
 public class UserDomainService extends DomainService<User> implements IUserDomainService {
 
     @Autowired
-    private UserRepository _userDAO;
+    private IUserRepository _userRepository;
 
     @Override
     public Boolean insert(User entity) {
-        _userDAO.insert(entity);
+        _userRepository.insert(entity);
 
         return !super.notificationService.hasErrors() && super.unitOfWork.commit();
     }
@@ -44,15 +44,27 @@ public class UserDomainService extends DomainService<User> implements IUserDomai
 
     @Override
     public List<User> getAll() {
-        return _userDAO.getAll();
+        return _userRepository.getAll();
     }
 
     @Override
     public User get(UUID id) {
-        var user = _userDAO.get(id);
+        var user = _userRepository.get(id);
 
         if (user == null) {
             notificationService.addError("Usuário não encontrado!");
+            return null;
+        }
+
+        return user;
+    }
+
+    @Override
+    public User get(String email, String password) {
+        var user = _userRepository.get(email, password);
+
+        if (user == null) {
+            notificationService.addError("Email e/ou senha incorretos!");
             return null;
         }
 

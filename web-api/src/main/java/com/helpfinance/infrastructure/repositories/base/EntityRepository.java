@@ -1,7 +1,6 @@
 package com.helpfinance.infrastructure.repositories.base;
 
 import com.helpfinance.infrastructure.interfaces.base.IRepository;
-import com.helpfinance.domain.entities.User;
 import com.helpfinance.domain.entities.base.EntityBase;
 import com.helpfinance.core.services.NotificationService;
 import com.helpfinance.core.utils.classUtils;
@@ -22,18 +21,19 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
     @Autowired
     protected NotificationService notificationService;
 
-    private final String _tableName;
     private Class<TEntity> _entityType;
+    protected final String tableName;
 
     @Autowired(required = false)
     protected Connection connection;
 
     public EntityRepository(String tableName) {
-        _tableName = tableName;
+        this.tableName = tableName;
 
         try {
             var fullTypeName = this.getClass().getGenericSuperclass().getTypeName();
-            var entityTypeName = fullTypeName.substring(fullTypeName.indexOf("<"), fullTypeName.length() - 1).replace(">", "").replace("<", "");
+            var entityTypeName = fullTypeName.substring(fullTypeName.indexOf("<"), fullTypeName.length() - 1)
+                    .replace(">", "").replace("<", "");
             _entityType = (Class<TEntity>) Class.forName(entityTypeName);
         } catch (Exception e) {
             _entityType = (Class<TEntity>) this.getClass().getGenericSuperclass().getClass();
@@ -73,7 +73,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
                 count++;
             }
 
-            generatedScript = "INSERT INTO " + _tableName + " (" + fieldsNames + ")" + " VALUES (" + parameters + ")";
+            generatedScript = "INSERT INTO " + tableName + " (" + fieldsNames + ")" + " VALUES (" + parameters + ")";
 
             var statement = connection.prepareStatement(generatedScript);
 
@@ -118,7 +118,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
                 count++;
             }
 
-            generatedScript = "UPDATE " + _tableName + setScript + " WHERE id = " + entity.getId();
+            generatedScript = "UPDATE " + tableName + setScript + " WHERE id = " + entity.getId();
 
             var statement = connection.prepareStatement(generatedScript);
 
@@ -145,7 +145,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
 
         try {
             var statement = connection.prepareStatement(
-                    "DELETE FROM " + _tableName + " WHERE id = " + fieldUtils.formatUuidToString(entity.getId()));
+                    "DELETE FROM " + tableName + " WHERE id = " + fieldUtils.formatUuidToString(entity.getId()));
 
             statement.executeUpdate();
 
@@ -167,7 +167,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
 
         try {
             var statement = connection
-                    .prepareStatement("DELETE FROM " + _tableName + " WHERE id = " + fieldUtils.formatUuidToString(id));
+                    .prepareStatement("DELETE FROM " + tableName + " WHERE id = " + fieldUtils.formatUuidToString(id));
 
             statement.executeUpdate();
 
@@ -192,7 +192,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
 
         try {
             statement = connection.prepareStatement(
-                    "SELECT * FROM " + _tableName + " WHERE id = '" + fieldUtils.formatUuidToString(id) + "'");
+                    "SELECT * FROM " + tableName + " WHERE id = '" + fieldUtils.formatUuidToString(id) + "'");
             resultSet = statement.executeQuery();
 
             if (!resultSet.next())
@@ -229,7 +229,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
         var resultSet = (ResultSet) null;
 
         try {
-            statement = connection.prepareStatement("SELECT * FROM " + _tableName);
+            statement = connection.prepareStatement("SELECT * FROM " + tableName);
             resultSet = statement.executeQuery();
 
             var entities = new ArrayList<TEntity>();
@@ -259,5 +259,20 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
                 e.printStackTrace();
             }
         }
+    }
+
+    protected TEntity getEntityFromResult(ResultSet resultSet) {
+        try {
+            var entity = classUtils.tryGetInstanceOf(_entityType);
+            var fields = classUtils.getEntityFields(_entityType);
+
+            for (var field : fields)
+                fieldUtils.setValueTo(entity, field, resultSet.getObject(field.getName()));
+
+            return entity;
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 }

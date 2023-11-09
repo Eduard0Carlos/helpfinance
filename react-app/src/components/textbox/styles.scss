@@ -1,0 +1,29 @@
+@import "styles/variables";
+
+.textbox {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0;
+
+    &.error input {
+        color: rgba($error, 0.8);
+    }
+
+    &.error input::placeholder {
+        color: rgba($error, 0.8);
+    }
+
+    &.error p {
+        text-wrap: nowrap;
+        margin-top: 5px;
+        margin-left: 5px;
+        color: rgba($error, 0.8);
+        font-size: 14px;
+        font-weight: 200;
+    }
+}

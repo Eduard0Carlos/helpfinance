@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "./react-app"
+		},
+		{
+			"path": "./web-api"
+		}
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "automatic",
+		"git.ignoreLimitWarning": true
+	}
+}

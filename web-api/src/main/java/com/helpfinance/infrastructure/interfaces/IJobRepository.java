@@ -1,4 +1,7 @@
 package com.helpfinance.infrastructure.interfaces;
 
-public interface IJobRepository {
+import com.helpfinance.domain.entities.Job;
+import com.helpfinance.infrastructure.interfaces.base.IRepository;
+
+public interface IJobRepository extends IRepository<Job> {
 }
