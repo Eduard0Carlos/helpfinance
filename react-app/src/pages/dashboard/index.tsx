@@ -49,7 +49,6 @@ const DashboardNavBar = () => {
     setCurrentActive(icon);
   };
 
-
   return (
     <div className="dashboard">
       <DashboardLoadingPage />
@@ -67,8 +66,8 @@ const DashboardNavBar = () => {
             </section>
             <section>
               <div className="profile">
-                <NotificationIcon className="notification-icon"/>
-                <MoneyBox amount={2000}/>
+                <NotificationIcon className="notification-icon" />
+                <MoneyBox amount={2000} />
                 <img src="https://ui-avatars.com/api/?name=Carlos+Eduardo+Vieira&background=random" />
               </div>
             </section>

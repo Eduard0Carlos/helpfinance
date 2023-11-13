@@ -1,0 +1,69 @@
+@import "styles/variables";
+
+.investment-card {
+  animation: opacity-animation 2s ease-in;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 5px;
+  transition: transform 111ms ease-in-out;
+  padding: 10px;
+  background-color: $dark;
+  filter: brightness(130%);
+  width: 130px;
+  height: 50%;
+  border-radius: 15px;
+  cursor: pointer;
+
+  &:hover {
+
+    & h1,
+    svg {
+      cursor: pointer;
+    }
+
+    transform: scale(105%);
+  }
+
+  & svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &-title {
+    color: $white !important;
+    font-weight: 200;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+  }
+
+  & h1 {
+    &.up {
+      color: $green;
+    }
+
+    color: $error;
+  }
+
+  &-porcentage {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 5px;
+
+    & h1 {
+      font-weight: 200;
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+  }
+
+  &-value {
+    font-weight: 200;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+  }
+}

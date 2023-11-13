@@ -12,24 +12,33 @@ import HomePage from "pages/home";
 import DashboardNavBar from "pages/dashboard";
 import MovimentationPage from "pages/dashboard/movimentation";
 import OverviewPage from "pages/dashboard/overview";
+import "lib/extensions/array.extensions";
+import { ThemeProvider } from "components/theme-provider";
 
 const AppRouter = () => (
   <main className="main-container">
     <BrowserRouter>
       <Toaster />
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/dashboard/loading' element={<DashboardLoadingPage />} />
-        <Route path='/dashboard' element={<DashboardNavBar />} >
-          <Route index element={<OverviewPage></OverviewPage>} />
-          <Route path='movimentations' element={<MovimentationPage />} />
-          <Route path='investments' element={<></>} />
-          <Route path='profile' element={<></>} />
-        </Route>
-        {/* <Route path='announce/my/:id' element={<MyAnnouncePage />} />
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/dashboard/loading' element={<DashboardLoadingPage />} />
+          <Route path='/dashboard' element={<DashboardNavBar />} >
+            <Route index element={<OverviewPage />} />
+            <Route path='movimentations' element={<MovimentationPage />} />
+            <Route path='investments' element={<></>} />
+            <Route path='profile' element={<></>} />
+          </Route>
+          {/* <Route path='announce/my/:id' element={<MyAnnouncePage />} />
       <Route path='*' element={<NotFoundPage />} /> */}
-      </Routes>
+        </Routes>
+      </ThemeProvider>
     </BrowserRouter>
   </main>
 );

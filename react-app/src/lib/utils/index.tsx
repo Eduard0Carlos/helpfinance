@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
+import { MovimentationCategory } from "lib/enums";
 import IInput from "lib/interfaces/IInput";
+import IMovCategoryInfo from "lib/interfaces/IMovCategoryInfo";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -60,8 +62,30 @@ const validateField = (input: IInput) => {
   return true;
 };
 
+function formatMoney(number: number) {
+  return number.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function formatMovimentationCategory(movCategory: string): IMovCategoryInfo {
+  switch (movCategory) {
+  case MovimentationCategory.FOOD:
+    return { description: "Comida", color: "#8AFFF9" };
+
+  case MovimentationCategory.BILL:
+    return { description: "Contas", color: "#E1A1FF" };
+  
+  case MovimentationCategory.RECREATION:
+    return { description: "Lazer", color: "#57FFAE" };
+
+  default:
+    return { description: "", color: "" };
+  }
+}
+
 export {
   validateField,
   isNullOrWhitespace,
-  specialChars
+  specialChars,
+  formatMoney,
+  formatMovimentationCategory
 };

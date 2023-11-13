@@ -91,7 +91,7 @@ public class QAController extends ApiController {
 
     private void InsertMovimentation(UUID userId) {
         var movimentation = new Movimentation(userId, "Mercado", 200, MovimentationCategory.FOOD,
-                MovimentationType.OUTGOING);
+                MovimentationType.OUTGOING, Timestamp.valueOf(LocalDateTime.now()));
         movimentationRepository.insert(movimentation);
 
         InsertRecurrency(movimentation.getId());

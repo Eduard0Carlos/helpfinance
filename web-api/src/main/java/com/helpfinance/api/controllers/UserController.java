@@ -37,6 +37,6 @@ public class UserController extends ApiController {
     
     @PostMapping
     IHttpResult post(@RequestBody UserAddModel model) {
-        return getResult(_userApplicationService.Insert(model));
+        return getResult(_userApplicationService.insert(model));
     }
 }

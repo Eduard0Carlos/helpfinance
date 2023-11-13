@@ -1,0 +1,62 @@
+@import "styles/variables";
+
+.movimentation-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: $dark;
+  filter: brightness(130%);
+  width: 100%;
+  height: fit-content;
+  border-radius: 10px;
+
+  & h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+  & .movimentation-value {
+    margin-right: 10px;
+  }
+
+  &.incoming {
+    & h1 {
+      color: $green;
+    }
+
+    & svg {
+      fill: $green
+    }
+  }
+
+  &.outgoing {
+    & h1 {
+      color: $error;
+    }
+
+    & svg {
+      fill: $error
+    }
+  }
+
+  & .left {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+
+    & h1 {
+      color: $white
+    }
+
+    & svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

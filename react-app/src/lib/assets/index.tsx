@@ -12,6 +12,8 @@ import { ReactComponent as NeonTriangle } from "../../assets/neon-triangle.svg";
 import { ReactComponent as VisibilityOffIcon } from "../../assets/visibility_off.svg";
 import { ReactComponent as VisibilityOnIcon } from "../../assets/visibility_on.svg";
 import { ReactComponent as NotificationIcon } from "../../assets/notifications.svg";
+import { ReactComponent as UpIcon } from "../../assets/up-icon.svg";
+import { ReactComponent as DownIcon } from "../../assets/down-icon.svg";
 
 export {
   facebookIcon,
@@ -27,5 +29,7 @@ export {
   NeonTriangle,
   VisibilityOffIcon,
   VisibilityOnIcon,
-  NotificationIcon
+  NotificationIcon,
+  UpIcon,
+  DownIcon
 };

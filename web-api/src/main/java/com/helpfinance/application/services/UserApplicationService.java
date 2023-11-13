@@ -41,7 +41,7 @@ public class UserApplicationService extends BaseService implements IUserApplicat
     }
 
     @Override
-    public User Insert(UserAddModel userModel) {
+    public User insert(UserAddModel userModel) {
         var newUser = new User(userModel.name, userModel.birthdate, userModel.email, userModel.password);
 
         _userDomainService.insert(newUser);

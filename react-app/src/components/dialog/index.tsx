@@ -16,7 +16,6 @@ interface IDialogPortalProps {
 }
 
 const DialogPortal = ({
-  className,
   ...props
 }: IDialogPortalProps) => (
   <DialogPrimitive.Portal {...props} />

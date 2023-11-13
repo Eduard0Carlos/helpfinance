@@ -10,5 +10,5 @@ public interface IUserApplicationService {
     List<User> getAll();
     User get(UUID id);
     User get(String email, String password);
-    User Insert(UserAddModel user);
+    User insert(UserAddModel user);
 }

@@ -1,6 +1,7 @@
 package com.helpfinance.core.utils;
 
 import com.helpfinance.domain.entities.base.EntityBase;
+import com.helpfinance.domain.enums.MovimentationCategory;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
@@ -12,14 +13,13 @@ public class fieldUtils {
             var value = getMethod.invoke(entity);
 
             if (isUUID(field))
-                return formatUuidToString((UUID)value);
+                return formatUuidToString((UUID) value);
 
             if (isEnum(field))
                 return value.toString();
 
             return getMethod.invoke(entity);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -32,26 +32,48 @@ public class fieldUtils {
             if (isUUID(field))
                 value = fieldUtils.formatStringToUUID(value);
 
+            if (isEnum(field))
+                value = fieldUtils.formatStringToEnum(object, field, value);
+
             if (setMethod != null && setMethod.canAccess(object))
                 setMethod.invoke(object, value);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static boolean isEnum(Field field) {
-        return field.getType().getSuperclass() != null && field.getType().getSuperclass().getTypeName().equals(Enum.class.getTypeName());
+        return field.getType().getSuperclass() != null
+                && field.getType().getSuperclass().getTypeName().equals(Enum.class.getTypeName());
     }
 
     public static UUID formatStringToUUID(Object value) {
         var valueString = value.toString().trim();
 
-        return UUID.fromString(valueString.substring(0, 8) + "-" + valueString.substring(8, 12) + "-" + valueString.substring(12, 16) + "-" + valueString.substring(16, 20) + "-" + valueString.substring(20, valueString.length()));
+        return UUID.fromString(
+                valueString.substring(0, 8) + "-" + valueString.substring(8, 12) + "-" + valueString.substring(12, 16)
+                        + "-" + valueString.substring(16, 20) + "-" + valueString.substring(20, valueString.length()));
+    }
+
+    public static <T> Object formatStringToEnum(T instance, Field field, Object value) {
+        var enumMethods = classUtils.getAllEntityMethods(field.getType());
+
+        var valueOfMethod = enumMethods.stream()
+                .filter(x -> x.getName().toLowerCase().contains("valueof") && x.getParameterCount() == 1).findFirst()
+                .orElse(null);
+
+        if (valueOfMethod == null)
+            return null;
+
+        try {
+            return valueOfMethod.invoke(instance, value);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static String formatUuidToString(UUID value) {
-        return  value.toString().replace("-", "").toUpperCase();
+        return value.toString().replace("-", "").toUpperCase();
     }
 
     public static boolean isUUID(Field field) {

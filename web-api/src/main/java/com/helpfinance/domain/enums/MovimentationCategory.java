@@ -2,7 +2,8 @@ package com.helpfinance.domain.enums;
 
 public enum MovimentationCategory {
     FOOD,
-    CLOTH
+    BILL,
+    RECREATION
 
     // TODO: Write all possibles categories
 }

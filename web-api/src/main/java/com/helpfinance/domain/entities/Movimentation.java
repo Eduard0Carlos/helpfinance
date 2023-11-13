@@ -5,6 +5,7 @@ import com.helpfinance.domain.enums.MovimentationCategory;
 import com.helpfinance.domain.enums.MovimentationType;
 import com.helpfinance.domain.interfaces.entities.IEntity;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class Movimentation extends EntityBase implements IEntity<Movimentation> {
@@ -13,11 +14,13 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
     private int amount;
     private MovimentationCategory category;
     private MovimentationType movType;
+    private Timestamp date;
 
-    private Movimentation() { }
+    private Movimentation() {
+    }
 
-    public Movimentation(UUID userId, String title, int amount, MovimentationCategory category, MovimentationType movType)
-    {
+    public Movimentation(UUID userId, String title, int amount, MovimentationCategory category,
+            MovimentationType movType, Timestamp date) {
         super();
 
         this.setUserId(userId);
@@ -25,6 +28,7 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
         this.setAmount(amount);
         this.setCategory(category);
         this.setMovType(movType);
+        this.setDate(date);
     }
 
     public UUID getUserId() {
@@ -47,8 +51,8 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
         return amount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setAmount(Object amount) {
+        this.amount = Integer.valueOf(amount.toString());
     }
 
     public MovimentationCategory getCategory() {
@@ -65,5 +69,13 @@ public class Movimentation extends EntityBase implements IEntity<Movimentation> 
 
     public void setMovType(MovimentationType type) {
         this.movType = type;
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { VisibilityOffIcon, VisibilityOnIcon } from "../../lib/assets";
 import "./styles.scss";
+import { formatMoney } from "lib/utils";
 
 interface IMoneyBoxProps {
   amount: number
@@ -13,10 +14,6 @@ const MoneyBox = (props: IMoneyBoxProps) => {
   const toggleVisible = () => setIsVisible(!isVisible);
 
   let notVisibleText = "";
-
-  function formatMoney(number: number) {
-    return number.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-  }
 
   for (let index = 0; index < formatMoney(props.amount).length; index++) {
     notVisibleText += "*";

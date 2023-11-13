@@ -10,6 +10,9 @@ import com.helpfinance.core.utils.statementUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -63,7 +66,7 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
             for (var field : fields) {
                 var separator = (count == fields.size() ? "" : ", ");
 
-                fieldsNames.append(field.getName() + separator);
+                fieldsNames.append("\"" + field.getName().toUpperCase() + "\"" + separator);
                 parameters.append(":param" + count + separator);
 
                 var value = fieldUtils.valueOf(entity, field);
@@ -274,5 +277,15 @@ public abstract class EntityRepository<TEntity extends EntityBase> implements IR
             return null;
         }
 
+    }
+
+    protected String uuidToString(UUID id) {
+        return "'" + id.toString().toUpperCase().replace("-", "") + "'";
+    }
+
+    protected String formatDate(Timestamp date) {
+        var localDate = date.toLocalDateTime();
+
+        return DateTimeFormatter.ISO_DATE.format(localDate);
     }
 }
