@@ -1,0 +1,1 @@
+powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "%~dp0\scripts\run-webapi-and-jsp.ps1"
