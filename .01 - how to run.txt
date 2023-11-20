@@ -1,0 +1,10 @@
+Dependencies:
+  - Java 17+;
+  - Maven;
+
+How to RUN:
+  - Execute the ".02 - RUN PROJECTS.bat";
+  - Done :)
+
+Repository:
+  - https://github.com/Eduard0Carlos/helpfinance;

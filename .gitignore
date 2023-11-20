@@ -6,7 +6,7 @@ target/
 
 # dependencies
 /node_modules
-/01 - dependencies
+/dependencies
 /.pnp
 .pnp.js
 

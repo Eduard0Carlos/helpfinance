@@ -1,0 +1,93 @@
+.card-container {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.card-container .cards {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
+  gap: 10px;
+  overflow-y: scroll;
+  margin: auto;
+}
+
+.payment-card {
+  width: 80%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  color: #E0E0E0;
+  font-weight: 200;
+  font-size: 16px;
+  background-color: #333;
+  border-radius: 20px;
+}
+
+.payment-card h1 {
+  margin: auto;
+  font-size: 20px;
+}
+
+.bank-container {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.bank-container .banks {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
+  gap: 10px;
+  overflow-y: scroll;
+  margin: auto;
+}
+
+.bank {
+  width: 80%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  color: #E0E0E0;
+  font-weight: 200;
+  font-size: 16px;
+  background-color: #333;
+  border-radius: 20px;
+}
+
+.bank h1 {
+  margin: auto;
+  font-size: 20px;
+}
+
+
+.union {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
